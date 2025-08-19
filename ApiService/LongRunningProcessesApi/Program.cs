@@ -1,6 +1,5 @@
-using LongRunningProcesses.Api;
+using LongRunningProcessesApi;
 using MassTransit;
-using Microsoft.Extensions.Caching.Distributed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,9 +31,6 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSignalR();
-
-//builder.Services.AddScoped<ITextProcessorService, TextProcessorService>();
-//builder.Services.AddScoped<IAsyncSenderAdapter, AsyncSenderAdapter>();
 
 var app = builder.Build();
 

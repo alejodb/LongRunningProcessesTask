@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../ClassLibraries/LongRunningProcesses.Dtos/LongRunningProcesses.Dtos.csproj" />
+    <ProjectReference Include="../../Shared/LongRunningProcesses.Dtos/LongRunningProcesses.Dtos.csproj" />
   </ItemGroup>
 
 </Project>

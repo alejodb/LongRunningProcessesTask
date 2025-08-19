@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System;
 
-namespace LongRunningProcesses.Api
+namespace LongRunningProcessesApi
 {
   public class ChatHub : Hub
   {

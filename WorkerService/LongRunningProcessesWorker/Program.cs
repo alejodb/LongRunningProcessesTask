@@ -1,4 +1,4 @@
-using LongRunningProcesses.WorkerService;
+using LongRunningProcessesWorker;
 using MassTransit;
 
 var builder = Host.CreateApplicationBuilder(args);

@@ -18,13 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../LongRunningProcesses.Api/LongRunningProcesses.Api.csproj" />
-    <ProjectReference Include="../LongRunningProcesses.WorkerService/LongRunningProcesses.WorkerService.csproj" />
+    <ProjectReference Include="../../ApiService/LongRunningProcessesApi/LongRunningProcessesApi.csproj" />
+    <ProjectReference Include="../../WorkerService/LongRunningProcessesWorker/LongRunningProcessesWorker.csproj" />
   </ItemGroup>
 
   <Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">
     <ItemGroup>
-      <PackageJsons Include="..\*\package.json" />
+      <PackageJsons Include="..\..\FrontEnd\long-running-processes-client\package.json" />
     </ItemGroup>
 
     <!-- Install npm packages if node_modules is missing -->
