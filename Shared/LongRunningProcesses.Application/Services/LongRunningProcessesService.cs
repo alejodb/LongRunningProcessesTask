@@ -15,7 +15,8 @@ public class LongRunningProcessesService(ILogger<LongRunningProcessesService> lo
     var processState = new ProcessState
     {
       ProcessId = Guid.NewGuid().ToString("N"),
-      Status = "pending"
+      Status = ProcessStatus.Pending,
+      ProgressPosition = 0
     };
 
     logger.LogInformation($"Received request to count text occurrences, ProcessId: {processState.ProcessId}, ConnectionId: {countTextOcurrencesRequestDto.ConnectionId}");
@@ -31,7 +32,7 @@ public class LongRunningProcessesService(ILogger<LongRunningProcessesService> lo
     var processState = await processStateRepository.GetOrInitializeAsync(processId);
     if (processState != null)
     {
-      processState.Status = "canceled";
+      processState.Status = ProcessStatus.Canceled;
       await processStateRepository.SaveAsync(processState);
     }
   }
@@ -47,7 +48,7 @@ public class LongRunningProcessesService(ILogger<LongRunningProcessesService> lo
       await processStateRepository.SaveAsync(new ProcessState
       {
         ProcessId = message.ProcessId,
-        Status = "failed"
+        Status = ProcessStatus.Failed
       });
       logger.LogError(ex, $"Error processing message for process {message.ProcessId}");
       throw;
@@ -58,7 +59,7 @@ public class LongRunningProcessesService(ILogger<LongRunningProcessesService> lo
   {
     var processState = await processStateRepository.GetOrInitializeAsync(countTextOcurrencesMessageDto.ProcessId);
 
-    if (processState != null && processState.Status == "processing" && processState.ProgressPosition > 0)
+    if (processState.Status == ProcessStatus.Processing)
     {
       logger.LogInformation($"Resuming process {processState.ProcessId} from character position {processState.ProgressPosition}");
     }
@@ -70,11 +71,11 @@ public class LongRunningProcessesService(ILogger<LongRunningProcessesService> lo
     var signedTextOcurrences = GenerateSignedTextOcurrencesString(countTextOcurrencesMessageDto.Text);
     logger.LogInformation($"Process: {JsonSerializer.Serialize(processState)}");
     logger.LogInformation($"Generated signed text occurrences for process {countTextOcurrencesMessageDto.ProcessId}: {signedTextOcurrences}");
-    while (processState.ProgressPosition < signedTextOcurrences.Length && processState.Status == "processing")
+    while (processState.ProgressPosition < signedTextOcurrences.Length && processState.Status != ProcessStatus.Canceled)
     {
       processState = await ExecuteProcessStep(processState.ProcessId, signedTextOcurrences[processState.ProgressPosition], processState.ProgressPosition, countTextOcurrencesMessageDto);
     }
-    if (processState.Status == "canceled")
+    if (processState.Status == ProcessStatus.Canceled)
     {
       logger.LogInformation($"Process {processState.ProcessId} was canceled.");
       await asyncCommunicationsProvider.SendStatusMessage(countTextOcurrencesMessageDto.ConnectionId, $"Long-running process CANCELED successfully.");
@@ -99,7 +100,7 @@ public class LongRunningProcessesService(ILogger<LongRunningProcessesService> lo
     }*/
 
     var processState = await processStateRepository.GetOrInitializeAsync(processId);
-    if (processState.Status != "canceled")
+    if (processState.Status != ProcessStatus.Canceled)
     {
       processState.ProgressPosition++;
       await asyncCommunicationsProvider.SendResponseMessage(countTextOcurrencesMessageDto.ConnectionId, character.ToString());

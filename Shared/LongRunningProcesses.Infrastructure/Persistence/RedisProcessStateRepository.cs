@@ -13,7 +13,7 @@ public class RedisProcessStateRepository(IDistributedCache redisCache) : IProces
       processState = new ProcessState
       {
         ProcessId = processId,
-        Status = "processing",
+        Status = ProcessStatus.Pending,
         ProgressPosition = 0
       };
       await SaveAsync(processState);

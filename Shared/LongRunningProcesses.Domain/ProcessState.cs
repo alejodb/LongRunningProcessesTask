@@ -2,9 +2,17 @@
 
 namespace LongRunningProcesses.Domain;
 
+public enum ProcessStatus
+{
+  Pending,
+  Processing,
+  Canceled,
+  Failed
+}
+
 public class ProcessState
 {
   public required string ProcessId { get; set; }
-  public required string Status { get; set; }
+  public required ProcessStatus Status { get; set; }
   public int ProgressPosition { get; set; }
 }
