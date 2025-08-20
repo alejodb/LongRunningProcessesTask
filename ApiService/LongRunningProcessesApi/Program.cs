@@ -1,6 +1,8 @@
 using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Application.Services;
 using LongRunningProcesses.Infrastructure.AsyncCommunications;
+using LongRunningProcesses.Infrastructure.Messaging;
+using LongRunningProcesses.Infrastructure.Persistence;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);

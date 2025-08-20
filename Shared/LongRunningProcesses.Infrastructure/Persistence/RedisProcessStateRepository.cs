@@ -3,6 +3,8 @@ using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Domain;
 using Microsoft.Extensions.Caching.Distributed;
 
+namespace LongRunningProcesses.Infrastructure.Persistence;
+
 public class RedisProcessStateRepository(IDistributedCache redisCache) : IProcessStateRepository
 {
   public async Task<ProcessState> GetOrInitializeAsync(string processId)
