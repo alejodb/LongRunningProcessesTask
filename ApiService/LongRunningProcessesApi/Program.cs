@@ -1,7 +1,6 @@
 using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Application.Services;
 using LongRunningProcesses.Infrastructure.AsyncCommunications;
-using LongRunningProcessesApi;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,6 +54,6 @@ app.UseCors("MyCORS");
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<ChatHub>("/chatHub");
+app.MapHub<SignalRChatHub>("/chatHub");
 
 app.Run();
