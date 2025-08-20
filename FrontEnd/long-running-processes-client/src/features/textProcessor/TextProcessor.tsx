@@ -13,7 +13,7 @@ export const TextProcessor = (): ReactElement => {
   const [connectionId, setConnectionId] = useState<string | null>(null)
   const [responseMessage, setResponseMessage] = useState<string>("")
   const [isProcessingMessage, setIsProcessingMessage] = useState<boolean>(false)
-  const [endMessage, setEndMessage] = useState<string | undefined>()
+  const [statusMessage, setStatusMessage] = useState<string | undefined>()
 
   const [
     sendMessage,
@@ -45,9 +45,9 @@ export const TextProcessor = (): ReactElement => {
           console.log("New message received:", text)
           setResponseMessage(responseMessage => responseMessage + text)
         })
-        connection.on("EndMessage", (message: string) => {
+        connection.on("StatusMessage", (message: string) => {
           setIsProcessingMessage(false)
-          setEndMessage(message)
+          setStatusMessage(message)
         })
       }
 
@@ -85,7 +85,7 @@ export const TextProcessor = (): ReactElement => {
           color="primary"
           onClick={() => {
             setResponseMessage("")
-            setEndMessage(undefined)
+            setStatusMessage(undefined)
             sendMessage({ text: message, connectionId: connectionId }).then(
               () => {
                 setIsProcessingMessage(true)
@@ -104,7 +104,7 @@ export const TextProcessor = (): ReactElement => {
           color="secondary"
           onClick={() => {
             if (countTextOcurrencesResponse?.processId) {
-              setEndMessage(undefined)
+              setStatusMessage(undefined)
               cancelProcess(countTextOcurrencesResponse.processId).then(undefined, (error: unknown) => {
                 console.error("Error canceling process:", error)
               })
@@ -134,8 +134,8 @@ export const TextProcessor = (): ReactElement => {
       >
         {isCancelProcessError && "Error canceling process"}
       </Alert>
-      <Alert severity="info" sx={{ display: endMessage ? "flex" : "none" }}>
-        {endMessage}
+      <Alert severity="info" sx={{ display: statusMessage ? "flex" : "none" }}>
+        {statusMessage}
       </Alert>
     </Stack>
   )

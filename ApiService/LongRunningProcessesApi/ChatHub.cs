@@ -11,10 +11,10 @@ namespace LongRunningProcessesApi
       await Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
     }
 
-    public async Task SendEndMessage(string connectionId, string message)
+    public async Task SendStatusMessage(string connectionId, string message)
     {
-      Console.WriteLine($"Sending end message to connection {connectionId}: {message}");
-      await Clients.Client(connectionId).SendAsync("EndMessage", message);
+      Console.WriteLine($"Sending status message to connection {connectionId}: {message}");
+      await Clients.Client(connectionId).SendAsync("StatusMessage", message);
     }
   }
 }

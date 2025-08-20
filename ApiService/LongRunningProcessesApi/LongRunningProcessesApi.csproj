@@ -9,12 +9,14 @@
   <ItemGroup>
     <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.4.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.2" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../Shared/LongRunningProcesses.Application/LongRunningProcesses.Application.csproj" />
     <ProjectReference Include="../../Shared/LongRunningProcesses.Dtos/LongRunningProcesses.Dtos.csproj" />
+    <ProjectReference Include="../../Shared/LongRunningProcesses.Infrastructure/LongRunningProcesses.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

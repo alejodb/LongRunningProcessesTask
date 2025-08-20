@@ -1,3 +1,6 @@
+using LongRunningProcesses.Application.Interfaces;
+using LongRunningProcesses.Application.Services;
+using LongRunningProcesses.Infrastructure.AsyncCommunications;
 using LongRunningProcessesWorker;
 using MassTransit;
 
@@ -24,7 +27,10 @@ builder.Services.AddMassTransit(x =>
       });
     });
 
-  builder.Services.AddTransient<TextOcurrencesProcessor>();
+builder.Services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
+builder.Services.AddScoped<IProcessStateRepository, RedisProcessStateRepository>();
+builder.Services.AddScoped<IAsyncCommunicationsProvider, SignalRCommunicationsProvider>();
+builder.Services.AddScoped<ILongRunningProcessesService, LongRunningProcessesService>();
 
 var host = builder.Build();
 host.Run();

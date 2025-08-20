@@ -1,15 +1,15 @@
 using System;
 using MassTransit;
 using LongRunningProcesses.Dtos.Queues;
+using LongRunningProcesses.Application.Interfaces;
 
 namespace LongRunningProcessesWorker;
 
-public class ProcessQueueConsumer(ILogger<ProcessQueueConsumer> logger, IServiceProvider serviceProvider) : IConsumer<CountTextOcurrencesMessageDto>
+public class ProcessQueueConsumer(ILogger<ProcessQueueConsumer> logger, ILongRunningProcessesService longRunningProcessesService) : IConsumer<CountTextOcurrencesMessageDto>
 {
   public async Task Consume(ConsumeContext<CountTextOcurrencesMessageDto> context)
   {
     logger.LogInformation("New message received for processing: {ProcessId}", context.Message.ProcessId);
-    TextOcurrencesProcessor textOcurrencesProcessor = ActivatorUtilities.CreateInstance<TextOcurrencesProcessor>(serviceProvider);
-    await textOcurrencesProcessor.ProcessMessage(context.Message);
+    await longRunningProcessesService.ProcessMessage(context.Message);
   }
 }

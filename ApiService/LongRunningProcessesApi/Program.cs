@@ -1,3 +1,6 @@
+using LongRunningProcesses.Application.Interfaces;
+using LongRunningProcesses.Application.Services;
+using LongRunningProcesses.Infrastructure.AsyncCommunications;
 using LongRunningProcessesApi;
 using MassTransit;
 
@@ -31,6 +34,11 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSignalR();
+
+builder.Services.AddScoped<ILongRunningProcessesService, LongRunningProcessesService>();
+builder.Services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
+builder.Services.AddScoped<IProcessStateRepository, RedisProcessStateRepository>();
+builder.Services.AddScoped<IAsyncCommunicationsProvider, SignalRCommunicationsProvider>();
 
 var app = builder.Build();
 
