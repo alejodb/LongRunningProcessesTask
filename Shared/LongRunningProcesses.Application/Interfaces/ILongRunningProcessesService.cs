@@ -7,6 +7,6 @@ namespace LongRunningProcesses.Application.Interfaces;
 public interface ILongRunningProcessesService
 {
   Task<CountTextOcurrencesResponseDto> CountTextOcurrences(CountTextOcurrencesRequestDto countTextOcurrencesRequestDto);
-  Task CancelProcess(string processId);
-  Task ProcessMessage(CountTextOcurrencesMessageDto message);
+  Task CancelCountTextOcurrencesProcess(string processId);
+  Task ProcessCountTextOcurrencesMessage(CountTextOcurrencesMessageDto message);
 }

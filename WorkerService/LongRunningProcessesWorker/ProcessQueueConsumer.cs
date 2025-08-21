@@ -10,6 +10,6 @@ public class ProcessQueueConsumer(ILogger<ProcessQueueConsumer> logger, ILongRun
   public async Task Consume(ConsumeContext<CountTextOcurrencesMessageDto> context)
   {
     logger.LogInformation("New message received for processing: {ProcessId}", context.Message.ProcessId);
-    await longRunningProcessesService.ProcessMessage(context.Message);
+    await longRunningProcessesService.ProcessCountTextOcurrencesMessage(context.Message);
   }
 }

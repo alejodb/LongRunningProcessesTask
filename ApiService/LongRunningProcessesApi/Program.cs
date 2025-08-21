@@ -1,5 +1,6 @@
 using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Application.Services;
+using LongRunningProcesses.Application.UsesCases;
 using LongRunningProcesses.Infrastructure.AsyncCommunications;
 using LongRunningProcesses.Infrastructure.Messaging;
 using LongRunningProcesses.Infrastructure.Persistence;
@@ -40,6 +41,9 @@ builder.Services.AddScoped<ILongRunningProcessesService, LongRunningProcessesSer
 builder.Services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
 builder.Services.AddScoped<IProcessStateRepository, RedisProcessStateRepository>();
 builder.Services.AddScoped<IAsyncCommunicationsProvider, SignalRCommunicationsProvider>();
+builder.Services.AddTransient<LongRunningProcessesOrchestator>();
+builder.Services.AddTransient<CancellationMonitor>();
+builder.Services.AddTransient<TestOcurrencesTasksPlanner>();
 
 var app = builder.Build();
 

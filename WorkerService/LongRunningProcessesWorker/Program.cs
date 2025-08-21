@@ -1,6 +1,9 @@
 using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Application.Services;
+using LongRunningProcesses.Application.UsesCases;
 using LongRunningProcesses.Infrastructure.AsyncCommunications;
+using LongRunningProcesses.Infrastructure.Messaging;
+using LongRunningProcesses.Infrastructure.Persistence;
 using LongRunningProcessesWorker;
 using MassTransit;
 
@@ -30,7 +33,10 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
 builder.Services.AddScoped<IProcessStateRepository, RedisProcessStateRepository>();
 builder.Services.AddScoped<IAsyncCommunicationsProvider, SignalRCommunicationsProvider>();
-builder.Services.AddScoped<ILongRunningProcessesService, LongRunningProcessesService>();
+builder.Services.AddTransient<ILongRunningProcessesService, LongRunningProcessesService>();
+builder.Services.AddTransient<LongRunningProcessesOrchestator>();
+builder.Services.AddTransient<CancellationMonitor>();
+builder.Services.AddTransient<TestOcurrencesTasksPlanner>();
 
 var host = builder.Build();
 host.Run();

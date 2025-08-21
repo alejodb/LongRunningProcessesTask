@@ -17,7 +17,7 @@ namespace LongRunningProcessesApi.Controllers
         [HttpDelete("{processId}")]
         public async Task<IActionResult> CancelProcess([FromRoute] string processId)
         {
-            await longRunningProcessesService.CancelProcess(processId);
+            await longRunningProcessesService.CancelCountTextOcurrencesProcess(processId);
             return Ok();
         }
     }
