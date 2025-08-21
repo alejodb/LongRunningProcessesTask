@@ -1,6 +1,4 @@
-using System;
 using LongRunningProcesses.Application.Interfaces;
-using LongRunningProcesses.Domain;
 using Microsoft.Extensions.Logging;
 
 namespace LongRunningProcesses.Application.UsesCases;
@@ -17,14 +15,12 @@ public class CancellationMonitor(ILogger<CancellationMonitor> logger, IProcessSt
       {
         await Task.Delay(CheckIntervalMilliseconds);
 
-        var processState = await processStateRepository.GetOrInitializeAsync(processId);
-        if (processState.Canceled)
+        if (await processStateRepository.CheckIsCanceledAsync(processId))
         {
           logger.LogInformation($"Process {processId} has been canceled.");
           cancellationTokenSource.Cancel();
           break;
         }
-
       }
     }
     catch (OperationCanceledException ex)

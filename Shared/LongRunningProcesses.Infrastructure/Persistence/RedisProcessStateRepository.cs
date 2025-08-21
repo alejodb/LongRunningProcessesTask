@@ -5,30 +5,34 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace LongRunningProcesses.Infrastructure.Persistence;
 
-public class RedisProcessStateRepository(IDistributedCache redisCache) : IProcessStateRepository
+public class RedisProcessStateRepository(
+  IDistributedCache redisCache)
+  : IProcessStateRepository
 {
-  public async Task<ProcessState> GetOrInitializeAsync(string processId)
+  public async Task<ProcessProgress?> GetProcessProgressAsync(string processId)
   {
-    var processState = JsonSerializer.Deserialize<ProcessState>((await redisCache.GetStringAsync($"process:{processId}")) ?? "");
-    if (processState == null)
-    {
-      processState = new ProcessState
-      {
-        ProcessId = processId,
-        ProgressPosition = 0
-      };
-      await SaveAsync(processState);
-    }
-    return processState;
+    var processStateValue = await redisCache.GetStringAsync($"process:{processId}");
+    return !string.IsNullOrEmpty(processStateValue) ? JsonSerializer.Deserialize<ProcessProgress>(processStateValue) : null;
   }
 
-  public async Task SaveAsync(ProcessState processState)
+  public async Task SaveProcessProgressAsync(ProcessProgress processProgress)
   {
-    await redisCache.SetStringAsync($"process:{processState.ProcessId}", JsonSerializer.Serialize(processState));
+    await redisCache.SetStringAsync($"process:{processProgress.ProcessId}", JsonSerializer.Serialize(processProgress));
   }
 
-  public async Task RemoveAsync(string processId)
+  public async Task RemoveProcessStateAsync(string processId)
   {
     await redisCache.RemoveAsync($"process:{processId}");
+    await redisCache.RemoveAsync($"process:{processId}:canceled");
+  }
+
+  public async Task<bool> CheckIsCanceledAsync(string processId)
+  {
+    return !string.IsNullOrEmpty(await redisCache.GetStringAsync($"process:{processId}:canceled"));
+  }
+
+  public async Task SaveCanceledAsync(string processId)
+  {
+    await redisCache.SetStringAsync($"process:{processId}:canceled", "true");
   }
 }

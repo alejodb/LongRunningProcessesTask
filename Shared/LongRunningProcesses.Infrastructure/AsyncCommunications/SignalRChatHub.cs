@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LongRunningProcesses.Infrastructure.AsyncCommunications;

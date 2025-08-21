@@ -2,7 +2,6 @@ using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Application.Services;
 using LongRunningProcesses.Application.UsesCases;
 using LongRunningProcesses.Infrastructure.AsyncCommunications;
-using LongRunningProcesses.Infrastructure.Messaging;
 using LongRunningProcesses.Infrastructure.Persistence;
 using LongRunningProcessesWorker;
 using MassTransit;
@@ -13,7 +12,8 @@ builder.AddRedisDistributedCache("redis");
 
 builder.Services.AddMassTransit(x =>
     {
-      x.AddConsumer<ProcessQueueConsumer>();
+      x.AddConsumer<CountTextOcurrencesQueueConsumer>();
+      x.AddConsumer<CancelProcessQueueConsumer>();
 
       x.UsingRabbitMq((context, config) =>
       {
@@ -25,15 +25,15 @@ builder.Services.AddMassTransit(x =>
                 initialInterval: TimeSpan.FromSeconds(5),
                 intervalIncrement: TimeSpan.FromSeconds(10)
             ));
-          e.ConfigureConsumer<ProcessQueueConsumer>(context);
+          e.ConfigureConsumer<CountTextOcurrencesQueueConsumer>(context);
+          e.ConfigureConsumer<CancelProcessQueueConsumer>(context);
         });
       });
     });
 
-builder.Services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
 builder.Services.AddScoped<IProcessStateRepository, RedisProcessStateRepository>();
 builder.Services.AddScoped<IAsyncCommunicationsProvider, SignalRCommunicationsProvider>();
-builder.Services.AddTransient<ILongRunningProcessesService, LongRunningProcessesService>();
+builder.Services.AddTransient<IMessagesConsumerService, MessagesConsumerService>();
 builder.Services.AddTransient<LongRunningProcessesOrchestator>();
 builder.Services.AddTransient<CancellationMonitor>();
 builder.Services.AddTransient<TestOcurrencesTasksPlanner>();

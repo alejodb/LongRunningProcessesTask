@@ -1,9 +1,7 @@
 using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Application.Services;
-using LongRunningProcesses.Application.UsesCases;
 using LongRunningProcesses.Infrastructure.AsyncCommunications;
 using LongRunningProcesses.Infrastructure.Messaging;
-using LongRunningProcesses.Infrastructure.Persistence;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,23 +29,16 @@ builder.Services.AddMassTransit(x =>
         });
     });
 
-// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 builder.Services.AddSignalR();
 
-builder.Services.AddScoped<ILongRunningProcessesService, LongRunningProcessesService>();
+builder.Services.AddScoped<ITextProcessorService, TextProcessorService>();
 builder.Services.AddScoped<IMessagePublisher, RabbitMqPublisher>();
-builder.Services.AddScoped<IProcessStateRepository, RedisProcessStateRepository>();
-builder.Services.AddScoped<IAsyncCommunicationsProvider, SignalRCommunicationsProvider>();
-builder.Services.AddTransient<LongRunningProcessesOrchestator>();
-builder.Services.AddTransient<CancellationMonitor>();
-builder.Services.AddTransient<TestOcurrencesTasksPlanner>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

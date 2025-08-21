@@ -1,5 +1,3 @@
-using System;
-
 namespace LongRunningProcesses.Application.Interfaces;
 
 public interface IAsyncCommunicationsProvider

@@ -6,7 +6,7 @@ namespace LongRunningProcessesApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TextProcessorController (ILongRunningProcessesService longRunningProcessesService) : ControllerBase
+    public class TextProcessorController (ITextProcessorService longRunningProcessesService) : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> CountTextOcurrences([FromBody] CountTextOcurrencesRequestDto countTextOcurrencesRequestDto)
