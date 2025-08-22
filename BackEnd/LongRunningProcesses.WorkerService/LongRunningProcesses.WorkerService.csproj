@@ -4,7 +4,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-LongRunningProcessesWorker-d748800b-3117-4ee4-8912-b48966401f57</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../Shared/LongRunningProcesses.Application/LongRunningProcesses.Application.csproj" />
-    <ProjectReference Include="../../Shared/LongRunningProcesses.Dtos/LongRunningProcesses.Dtos.csproj" />
-    <ProjectReference Include="../../Shared/LongRunningProcesses.Infrastructure/LongRunningProcesses.Infrastructure.csproj" />
+    <ProjectReference Include="../Shared/LongRunningProcesses.Application/LongRunningProcesses.Application.csproj" />
+    <ProjectReference Include="../Shared/LongRunningProcesses.Dtos/LongRunningProcesses.Dtos.csproj" />
+    <ProjectReference Include="../Shared/LongRunningProcesses.Infrastructure/LongRunningProcesses.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

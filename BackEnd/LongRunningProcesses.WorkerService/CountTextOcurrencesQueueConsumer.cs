@@ -2,7 +2,7 @@ using MassTransit;
 using LongRunningProcesses.Dtos.Queues;
 using LongRunningProcesses.Application.Interfaces;
 
-namespace LongRunningProcessesWorker;
+namespace LongRunningProcesses.WorkerService;
 
 public class CountTextOcurrencesQueueConsumer(
   ILogger<CountTextOcurrencesQueueConsumer> logger,

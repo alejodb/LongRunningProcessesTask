@@ -18,7 +18,7 @@ services:
     container_name: apiservice
     build:
       context: .
-      dockerfile: ApiService/LongRunningProcessesApi/Dockerfile
+      dockerfile: BackEnd/LongRunningProcesses.ApiService/Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -33,7 +33,7 @@ services:
     container_name: workerservice
     build:
       context: .
-      dockerfile: WorkerService/LongRunningProcessesWorker/Dockerfile
+      dockerfile: BackEnd/LongRunningProcesses.WorkerService/Dockerfile
     environment:
       - ConnectionStrings__redis=redis:6379
       - ConnectionStrings__rabbitmq=amqp://guest:guest@rabbitmq:5672

@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../Shared/LongRunningProcesses.Application/LongRunningProcesses.Application.csproj" />
-    <ProjectReference Include="../../Shared/LongRunningProcesses.Dtos/LongRunningProcesses.Dtos.csproj" />
-    <ProjectReference Include="../../Shared/LongRunningProcesses.Infrastructure/LongRunningProcesses.Infrastructure.csproj" />
+    <ProjectReference Include="../Shared/LongRunningProcesses.Application/LongRunningProcesses.Application.csproj" />
+    <ProjectReference Include="../Shared/LongRunningProcesses.Dtos/LongRunningProcesses.Dtos.csproj" />
+    <ProjectReference Include="../Shared/LongRunningProcesses.Infrastructure/LongRunningProcesses.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

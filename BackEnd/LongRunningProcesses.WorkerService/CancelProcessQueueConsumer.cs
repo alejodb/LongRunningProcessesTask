@@ -2,7 +2,7 @@ using LongRunningProcesses.Application.Interfaces;
 using LongRunningProcesses.Dtos.Queues;
 using MassTransit;
 
-namespace LongRunningProcessesWorker;
+namespace LongRunningProcesses.WorkerService;
 
 public class CancelProcessQueueConsumer(
   ILogger<CancelProcessQueueConsumer> logger,

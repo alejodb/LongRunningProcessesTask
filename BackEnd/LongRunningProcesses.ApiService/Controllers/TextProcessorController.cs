@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using LongRunningProcesses.Dtos.Apis;
 using LongRunningProcesses.Application.Interfaces;
 
-namespace LongRunningProcessesApi.Controllers
+namespace LongRunningProcesses.ApiService.Controllers
 {
     [Route("[controller]")]
     [ApiController]

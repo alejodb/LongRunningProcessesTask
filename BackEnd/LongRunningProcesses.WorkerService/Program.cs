@@ -3,7 +3,7 @@ using LongRunningProcesses.Application.Services;
 using LongRunningProcesses.Application.UsesCases;
 using LongRunningProcesses.Infrastructure.AsyncCommunications;
 using LongRunningProcesses.Infrastructure.Persistence;
-using LongRunningProcessesWorker;
+using LongRunningProcesses.WorkerService;
 using MassTransit;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -33,10 +33,10 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddScoped<IProcessStateRepository, RedisProcessStateRepository>();
 builder.Services.AddScoped<IAsyncCommunicationsProvider, SignalRCommunicationsProvider>();
-builder.Services.AddTransient<IMessagesConsumerService, MessagesConsumerService>();
-builder.Services.AddTransient<LongRunningProcessesOrchestator>();
-builder.Services.AddTransient<CancellationMonitor>();
-builder.Services.AddTransient<TestOcurrencesTasksPlanner>();
+builder.Services.AddScoped<IMessagesConsumerService, MessagesConsumerService>();
+builder.Services.AddScoped<LongRunningProcessesOrchestator>();
+builder.Services.AddScoped<CancellationMonitor>();
+builder.Services.AddScoped<TestOcurrencesTasksPlanner>();
 
 var host = builder.Build();
 host.Run();
