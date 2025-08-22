@@ -3,7 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace LongRunningProcesses.Application.UsesCases;
 
-public class CancellationMonitor(ILogger<CancellationMonitor> logger, IProcessStateRepository processStateRepository)
+public class CancellationMonitor(
+  ILogger<CancellationMonitor> logger,
+  IProcessStateRepository processStateRepository)
 {
   private const int CheckIntervalMilliseconds = 500;
 

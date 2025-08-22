@@ -10,7 +10,8 @@ public class LongRunningProcessesOrchestator(
   IAsyncCommunicationsProvider asyncCommunicationsProvider,
   TestOcurrencesTasksPlanner testOcurrencesTasksPlanner,
   CancellationMonitor cancellationMonitor,
-  IProcessStateRepository processStateRepository)
+  IProcessStateRepository processStateRepository,
+  int maxLengthyOperationDelay = 5000)
 {
   public async Task StartTextOcurrencesProcess(CountTextOcurrencesMessageDto countTextOcurrencesMessageDto)
   {
@@ -68,7 +69,7 @@ public class LongRunningProcessesOrchestator(
   private async Task ExecuteLengthyOperation(ProcessProgress processProgress, CancellationToken cancellationToken)
   {
     var randomizer = new Random();
-    await Task.Delay(randomizer.Next(5000), cancellationToken);
+    await Task.Delay(randomizer.Next(maxLengthyOperationDelay), cancellationToken);
 
     // Uncomment this section for testing random exceptions and retries
     /*if (processProgress.Position == randomizer.Next(0, processProgress.SignedTextOccurrences.Length - 1))
