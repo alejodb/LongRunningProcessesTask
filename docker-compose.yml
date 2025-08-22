@@ -1,0 +1,59 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" ## RabbitMQ main port
+      - "15672:15672" # Port for RabbitMQ management UI
+    restart: always
+
+  apiservice:
+    container_name: apiservice
+    build:
+      context: .
+      dockerfile: ApiService/LongRunningProcessesApi/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ConnectionStrings__rabbitmq=amqp://guest:guest@rabbitmq:5672
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+
+  workerservice:
+    container_name: workerservice
+    build:
+      context: .
+      dockerfile: WorkerService/LongRunningProcessesWorker/Dockerfile
+    environment:
+      - ConnectionStrings__redis=redis:6379
+      - ConnectionStrings__rabbitmq=amqp://guest:guest@rabbitmq:5672
+      - services__apiservice__http__0=http://apiservice:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - apiservice
+      - redis
+      - rabbitmq
+    restart: on-failure
+
+  reactapp:
+    container_name: reactapp
+    build:
+      context: .
+      dockerfile: FrontEnd/Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:3000/api
+    ports:
+      - "3000:80"
+    depends_on:
+      - apiservice
+    restart: always

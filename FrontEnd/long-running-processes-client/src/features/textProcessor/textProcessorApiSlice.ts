@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { API_URL } from '../../config'
 
 type CountTextOcurrencesRequest = {
   text: string
@@ -10,13 +11,13 @@ type CountTextOcurrencesResponse = {
 }
 
 export const textProcessorApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5281/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
   reducerPath: "textProcessorApi",
   endpoints: (builder) => ({
     countTextOccurrences: builder.mutation<CountTextOcurrencesResponse, CountTextOcurrencesRequest>({
       query: ({ text, connectionId }) => {
         return {
-          url: "/api/textprocessor",
+          url: "/textprocessor",
           method: "POST",
           body: {
             text,
@@ -28,7 +29,7 @@ export const textProcessorApiSlice = createApi({
     cancelProcess: builder.mutation<undefined, string>({
       query: (processId) => {
         return {
-          url: `/api/textprocessor/${processId}`,
+          url: `/textprocessor/${processId}`,
           method: "DELETE"
         }
       },

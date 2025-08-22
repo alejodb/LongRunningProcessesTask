@@ -4,7 +4,7 @@ using LongRunningProcesses.Application.Interfaces;
 
 namespace LongRunningProcessesApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class TextProcessorController (ITextProcessorService longRunningProcessesService) : ControllerBase
     {

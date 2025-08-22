@@ -1,11 +1,12 @@
-@LongRunningProcessesApi_HostAddress = http://localhost:5281
+@LongRunningProcessesApi_HostAddress = http://localhost:3000/
 
 POST {{LongRunningProcessesApi_HostAddress}}/api/textprocessor
 Content-Type: application/json
 Accept: application/json
 
 {
-  "text": "Hello, World!"
+  "text": "Hello, World!",
+  "connectionId": "your-connection-id"
 }
 
 ###

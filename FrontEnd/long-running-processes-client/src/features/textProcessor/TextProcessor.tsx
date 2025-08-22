@@ -7,6 +7,7 @@ import {
 } from "./textProcessorApiSlice"
 import Button from "@mui/material/Button"
 import { Alert, Box, Divider, LinearProgress, Stack, TextField, Typography } from "@mui/material"
+import { API_URL } from '../../config'
 
 export const TextProcessor = (): ReactElement => {
   const [message, setMessage] = useState<string>("")
@@ -33,16 +34,14 @@ export const TextProcessor = (): ReactElement => {
 
   useEffect(() => {
     if (!initialized.current) {
-      console.log("Setting up SignalR connection...")
       const setupConnection = async () => {
         const connection = new HubConnectionBuilder()
-          .withUrl("http://localhost:5281/chatHub")
+          .withUrl(`${API_URL}/chatHub`)
           .build()
 
         await connection.start()
         setConnectionId(connection.connectionId)
         connection.on("ReceiveMessage", (text: string) => {
-          console.log("New message received:", text)
           setResponseMessage(responseMessage => responseMessage + text)
         })
         connection.on("StatusMessage", (message: string) => {
@@ -53,7 +52,7 @@ export const TextProcessor = (): ReactElement => {
 
       setupConnection().then(
         () => {
-          console.log("Success")
+          console.log("Success connection to SignalR")
         },
         () => {
           console.log("Error connecting to SignalR")
