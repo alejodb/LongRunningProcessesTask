@@ -7,4 +7,5 @@
 
 1. Run the project with docker compose ``docker compose up``
 2. After running you can access the application using ``https://localhost:3000``.
-3. You can open new tabs or browser for testing multiples process running.
+3. Authenticate using user1, user2 or user3, password is same user.
+4. You can open new tabs or browser for testing multiples process running.
