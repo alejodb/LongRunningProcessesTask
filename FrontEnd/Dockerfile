@@ -11,8 +11,5 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build-react /app/dist /usr/share/nginx/html
 
-COPY FrontEnd/nginx.conf /etc/nginx/conf.d/default.conf
-COPY FrontEnd/.htpasswd /etc/nginx/.htpasswd
-
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
