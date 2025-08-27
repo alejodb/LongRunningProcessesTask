@@ -6,13 +6,32 @@ import {
   useCancelProcessMutation,
 } from "./textProcessorApiSlice"
 import Button from "@mui/material/Button"
-import { Alert, Box, Divider, LinearProgress, Stack, TextField, Typography } from "@mui/material"
-import { API_URL } from '../../config'
+import {
+  Alert,
+  Box,
+  Divider,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material"
+import { API_URL } from "../../config"
+import { LinearProgressWithLabel } from "../LinearProgressWithLabel"
+
+type StepCompletedMessage = {
+  processId: string
+  connectionId: string
+  stepResult: string
+  position: number
+  totalSteps: number
+}
 
 export const TextProcessor = (): ReactElement => {
   const [message, setMessage] = useState<string>("")
   const [connectionId, setConnectionId] = useState<string | null>(null)
-  const [responseMessage, setResponseMessage] = useState<string>("")
+  const [responseMessage, setResponseMessage] =
+    useState<string>("")
+  const [stepCompletedMessage, setStepCompletedMessage] =
+    useState<StepCompletedMessage | null>(null)
   const [isProcessingMessage, setIsProcessingMessage] = useState<boolean>(false)
   const [statusMessage, setStatusMessage] = useState<string | undefined>()
 
@@ -41,9 +60,14 @@ export const TextProcessor = (): ReactElement => {
 
         await connection.start()
         setConnectionId(connection.connectionId)
-        connection.on("ReceiveMessage", (text: string) => {
-          setResponseMessage(responseMessage => responseMessage + text)
-        })
+        connection.on(
+          "ReceiveMessage",
+          (stepCompletedMessageDto: StepCompletedMessage) => {
+
+            setResponseMessage(responseMessage => responseMessage + stepCompletedMessageDto.stepResult)
+            setStepCompletedMessage(stepCompletedMessageDto)
+          },
+        )
         connection.on("StatusMessage", (message: string) => {
           setIsProcessingMessage(false)
           setStatusMessage(message)
@@ -79,11 +103,14 @@ export const TextProcessor = (): ReactElement => {
       />
       <Box sx={{ display: "flex", gap: 2 }}>
         <Button
-          disabled={isSendMessageLoading || isProcessingMessage || !connectionId}
+          disabled={
+            isSendMessageLoading || isProcessingMessage || !connectionId
+          }
           variant="contained"
           color="primary"
           onClick={() => {
             setResponseMessage("")
+            setStepCompletedMessage(null)
             setStatusMessage(undefined)
             sendMessage({ text: message, connectionId: connectionId }).then(
               () => {
@@ -98,15 +125,22 @@ export const TextProcessor = (): ReactElement => {
           Send Message
         </Button>
         <Button
-          disabled={!isProcessingMessage || isCancelProcessLoading || !countTextOcurrencesResponse?.processId}
+          disabled={
+            !isProcessingMessage ||
+            isCancelProcessLoading ||
+            !countTextOcurrencesResponse?.processId
+          }
           variant="outlined"
           color="secondary"
           onClick={() => {
             if (countTextOcurrencesResponse?.processId) {
               setStatusMessage(undefined)
-              cancelProcess(countTextOcurrencesResponse.processId).then(undefined, (error: unknown) => {
-                console.error("Error canceling process:", error)
-              })
+              cancelProcess(countTextOcurrencesResponse.processId).then(
+                undefined,
+                (error: unknown) => {
+                  console.error("Error canceling process:", error)
+                },
+              )
             }
             // TODO: how to manage the cancelation action when no process in progress
           }}
@@ -114,9 +148,14 @@ export const TextProcessor = (): ReactElement => {
           Cancel
         </Button>
       </Box>
-
-      <LinearProgress
+          
+      <LinearProgressWithLabel
         sx={{ display: isProcessingMessage ? "flex" : "none" }}
+        value={
+          stepCompletedMessage
+            ? (stepCompletedMessage.position / stepCompletedMessage.totalSteps) * 100
+            : 0
+        }
       />
 
       <Typography variant="h6">Result:</Typography>

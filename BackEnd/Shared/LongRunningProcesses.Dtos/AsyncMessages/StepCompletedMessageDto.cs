@@ -1,0 +1,1 @@
+public record StepCompletedMessageDto(string ProcessId, string ConnectionId, string StepResult, int Position, int TotalSteps);

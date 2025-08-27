@@ -6,9 +6,9 @@ namespace LongRunningProcesses.Infrastructure.AsyncCommunications;
 
 public class SignalRCommunicationsProvider(IConfiguration configuration) : IAsyncCommunicationsProvider
 {
-  public async Task SendResponseMessage(string connectionId, string message)
+  public async Task SendResponseMessage(string connectionId, StepCompletedMessageDto stepCompletedMessageDto)
   {
-    await SendMessage("SendResponseMessage", connectionId, message);
+    await SendMessage("SendResponseMessage", connectionId, stepCompletedMessageDto);
   }
 
   public async Task SendStatusMessage(string connectionId, string message)
@@ -16,7 +16,7 @@ public class SignalRCommunicationsProvider(IConfiguration configuration) : IAsyn
     await SendMessage("SendStatusMessage", connectionId, message);
   }
 
-  private async Task SendMessage(string methodName, string connectionId, string message)
+  private async Task SendMessage(string methodName, string connectionId, object message)
   {
     var hubConnection = new HubConnectionBuilder()
         .WithUrl($"{configuration["services:apiservice:http:0"]}/chatHub")

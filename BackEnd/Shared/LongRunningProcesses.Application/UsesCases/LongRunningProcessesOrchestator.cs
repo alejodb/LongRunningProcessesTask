@@ -82,7 +82,12 @@ public class LongRunningProcessesOrchestator(
       throw new OperationCanceledException();
     }
 
-    await asyncCommunicationsProvider.SendResponseMessage(processProgress.ConnectionId, processProgress.SignedTextOccurrences[processProgress.Position].ToString());
+    await asyncCommunicationsProvider.SendResponseMessage(processProgress.ConnectionId, new StepCompletedMessageDto(
+      processProgress.ProcessId,
+      processProgress.ConnectionId,
+      processProgress.SignedTextOccurrences[processProgress.Position].ToString(),
+      processProgress.Position + 1,
+      processProgress.SignedTextOccurrences.Length));
     logger.LogInformation($"Processed character '{processProgress.SignedTextOccurrences[processProgress.Position]}' at position {processProgress.Position} for process {processProgress.ProcessId}");
 
     processProgress.Position++;
