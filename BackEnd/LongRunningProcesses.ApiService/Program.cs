@@ -6,20 +6,6 @@ using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddRedisDistributedCache("redis");
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyCORS",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-        });
-});
-
 builder.Services.AddMassTransit(x =>
     {
         x.UsingRabbitMq((context, config) =>
@@ -43,10 +29,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseCors("MyCORS");
-
-app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<SignalRChatHub>("/chatHub");
