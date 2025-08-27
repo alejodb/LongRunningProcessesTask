@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material"
 import { API_URL } from "../../config"
-import { LinearProgressWithLabel } from "../LinearProgressWithLabel"
+import { LinearProgressWithLabel } from "../../components/LinearProgressWithLabel"
 
 type StepCompletedMessage = {
   processId: string
@@ -150,7 +150,6 @@ export const TextProcessor = (): ReactElement => {
       </Box>
           
       <LinearProgressWithLabel
-        sx={{ display: isProcessingMessage ? "flex" : "none" }}
         value={
           stepCompletedMessage
             ? (stepCompletedMessage.position / stepCompletedMessage.totalSteps) * 100
